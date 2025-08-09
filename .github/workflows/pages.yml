@@ -30,11 +30,25 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Determine base path
+        shell: bash
+        run: |
+          REPO_NAME="${{ github.event.repository.name }}"
+          # If repo/org variable BASE_PATH is defined, use it; otherwise auto-detect
+          if [ -n "${{ vars.BASE_PATH }}" ]; then
+            echo "NEXT_PUBLIC_BASE_PATH=${{ vars.BASE_PATH }}" >> "$GITHUB_ENV"
+          elif [[ "$REPO_NAME" == *.github.io ]]; then
+            # User/Org site -> root
+            echo "NEXT_PUBLIC_BASE_PATH=" >> "$GITHUB_ENV"
+          else
+            # Project pages -> /<repo>
+            echo "NEXT_PUBLIC_BASE_PATH=/$REPO_NAME" >> "$GITHUB_ENV"
+          fi
+          echo "Resolved NEXT_PUBLIC_BASE_PATH='$NEXT_PUBLIC_BASE_PATH'"
+
       - name: Build static site
         env:
           NEXT_TELEMETRY_DISABLED: 1
-          # Uncomment if you deploy to a subpath like /odaryum-mvp (project pages)
-          # NEXT_PUBLIC_BASE_PATH: /odaryum-mvp
         run: npm run build
 
       - name: Upload Pages artifact

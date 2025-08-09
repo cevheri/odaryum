@@ -29,28 +29,23 @@ Notes:
 - When `output: "export"` is enabled, `next build` will generate the `out/` folder directly. You do NOT need a separate `next export` step.
 - If you use `next/image`, it will be unoptimized automatically in export mode.
 
-If you plan to host the site at a subpath like `https://username.github.io/repo-name/` (project Pages), consider adding a `basePath` so asset and link URLs resolve correctly:
+If you plan to host the site at a subpath like `https://username.github.io/repo-name/` (project Pages), add a `basePath` so asset and link URLs resolve correctly. This repo derives `basePath` dynamically from an environment variable:
 
 ```ts
-// next.config.ts (example)
+// next.config.ts (as configured in this project)
+const resolvedBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const nextConfig: NextConfig = {
   output: "export",
-  // Optional: Only needed when deploying to a subpath like /repo-name
-  // basePath: "/repo-name",
+  trailingSlash: true,
+  basePath: resolvedBasePath || undefined,
 };
 ```
 
-Alternatively, you can drive `basePath` via an environment variable for different environments (e.g., GitHub Pages vs. Netlify):
+The GitHub Actions workflow sets `NEXT_PUBLIC_BASE_PATH` automatically based on repository type:
 
-```ts
-// next.config.ts (example using env)
-const nextConfig: NextConfig = {
-  output: "export",
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
-};
-```
-
-Then set `NEXT_PUBLIC_BASE_PATH=/repo-name` only in GitHub (or its workflow). For custom domains or root deployments, leave it empty.
+- If the repository name ends with `.github.io`, it deploys at root: `NEXT_PUBLIC_BASE_PATH=""`.
+- Otherwise, it deploys at `/repo-name`: `NEXT_PUBLIC_BASE_PATH="/repo-name"`.
+- You can override this behavior by defining a repository variable `BASE_PATH` under Settings → Secrets and variables → Variables. The workflow will use that value as `NEXT_PUBLIC_BASE_PATH`.
 
 ### 2) Enable GitHub Pages for your repo
 
