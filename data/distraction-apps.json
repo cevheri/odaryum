@@ -1,0 +1,8 @@
+[
+  { "id": "youtube", "name": "YouTube", "isTracked": false },
+  { "id": "instagram", "name": "Instagram", "isTracked": false },
+  { "id": "tiktok", "name": "TikTok", "isTracked": false },
+  { "id": "twitter", "name": "Twitter", "isTracked": false }
+]
+
+

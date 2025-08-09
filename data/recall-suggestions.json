@@ -1,0 +1,22 @@
+[
+  {
+    "id": "breathing",
+    "title": "Quick Breathing Exercise",
+    "duration": 60,
+    "content": "Inhale 4s, hold 4s, exhale 6s. Repeat for 1 minute."
+  },
+  {
+    "id": "micro",
+    "title": "Micro Content",
+    "duration": 180,
+    "content": "Read a short insight to reset attention and return stronger."
+  },
+  {
+    "id": "fact",
+    "title": "Useful Fact",
+    "duration": 60,
+    "content": "Your brain prefers single-tasking. Close one tab now."
+  }
+]
+
+
